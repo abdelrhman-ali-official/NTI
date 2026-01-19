@@ -1,0 +1,16 @@
+# Angular
+node_modules/
+.angular/
+dist/
+
+# IDE
+.vscode/
+.idea/
+
+# Env
+.env
+.env.*
+
+# Logs
+npm-debug.log*
+yarn-debug.log*

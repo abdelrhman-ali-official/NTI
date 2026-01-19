@@ -1,0 +1,128 @@
+<div class="status-wrapper">
+  <div class="status-container">
+    <div class="status-card">
+      <div class="card-header">
+        <div class="logo-wrapper">
+          <img src="assets/images/logo.png" alt="NTI Logo" class="logo">
+        </div>
+        <h1>Check Application Status</h1>
+        <p class="subtitle">Enter your National ID to check your registration status</p>
+      </div>
+
+      <!-- Search Form -->
+      <div class="search-section" *ngIf="!status">
+        <div class="input-group">
+          <div class="input-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+            </svg>
+            <input
+              type="text"
+              [(ngModel)]="nationalId"
+              placeholder="Enter 14-digit National ID"
+              maxlength="14"
+              (keyup.enter)="checkStatus()">
+          </div>
+          <button class="btn btn-primary" (click)="checkStatus()" [disabled]="loading">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" *ngIf="!loading">
+              <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+            </svg>
+            <div class="spinner" *ngIf="loading"></div>
+            {{ loading ? 'Checking...' : 'Check Status' }}
+          </button>
+        </div>
+
+        <div class="alert alert-error" *ngIf="error">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+          </svg>
+          <span>{{ error }}</span>
+        </div>
+      </div>
+
+      <!-- Status Result -->
+      <div class="status-result" *ngIf="status">
+        <!-- Approved Status -->
+        <div class="status-content approved" *ngIf="status.status === 'Approved'">
+          <div class="status-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+          </div>
+          <h2>Application Approved! 🎉</h2>
+          <p class="message">{{ status.message }}</p>
+          <div class="status-badge success">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+            </svg>
+            Approved
+          </div>
+          <button class="btn btn-primary" (click)="goToLogin()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M11 7L9.6 8.4l2.6 2.6H2v2h10.2l-2.6 2.6L11 17l5-5-5-5zm9 12h-8v2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-8v2h8v14z"/>
+            </svg>
+            Go to Login
+          </button>
+        </div>
+
+        <!-- Pending Status -->
+        <div class="status-content pending" *ngIf="status.status === 'Pending'">
+          <div class="status-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+            </svg>
+          </div>
+          <h2>Application Under Review</h2>
+          <p class="message">{{ status.message }}</p>
+          <div class="status-badge pending">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+            </svg>
+            Pending Review
+          </div>
+          <div class="info-box">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+            </svg>
+            <span>Please check back later or contact support if it takes longer than expected.</span>
+          </div>
+        </div>
+
+        <!-- Rejected Status -->
+        <div class="status-content rejected" *ngIf="status.status === 'Rejected'">
+          <div class="status-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/>
+            </svg>
+          </div>
+          <h2>Application Not Approved</h2>
+          <p class="message">{{ status.message }}</p>
+          <div class="status-badge rejected">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+            </svg>
+            Rejected
+          </div>
+          <div class="info-box">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+            </svg>
+            <span>Please contact support for more information or try registering again with correct details.</span>
+          </div>
+        </div>
+
+        <button class="btn btn-secondary" (click)="status = null; error = null; nationalId = ''">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+          </svg>
+          Check Another Application
+        </button>
+      </div>
+
+      <div class="card-footer">
+        <p>Don't have an account? <a routerLink="/student/register">Register Now</a></p>
+        <p><a routerLink="/auth/login">Back to Login</a></p>
+      </div>
+    </div>
+  </div>
+</div>

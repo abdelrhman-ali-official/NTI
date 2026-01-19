@@ -1,0 +1,176 @@
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <img src="assets/images/logo.png" alt="NTI Logo" class="logo">
+    </div>
+  </div>
+</nav>
+
+<!-- Login Container -->
+<div class="login-wrapper">
+  <div class="login-container">
+    <!-- Left Side - Welcome Section -->
+    <div class="welcome-section">
+      <div class="welcome-content">
+        <h1 class="welcome-title">Welcome Back!</h1>
+        <p class="welcome-subtitle">QR-Based Attendance Management System</p>
+        <div class="features-list">
+          <div class="feature-item">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3 11h8V3H3v8zm2-6h4v4H5V5zm8-2v8h8V3h-8zm6 6h-4V5h4v4zM3 21h8v-8H3v8zm2-6h4v4H5v-4zm13-2h-2v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/>
+              </svg>
+            </div>
+            <div class="feature-text">
+              <h3>Smart QR Attendance</h3>
+              <p>Quick and secure check-in/out with QR codes</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+              </svg>
+            </div>
+            <div class="feature-text">
+              <h3>Real-time Tracking</h3>
+              <p>Monitor attendance in real-time</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/>
+              </svg>
+            </div>
+            <div class="feature-text">
+              <h3>Easy Management</h3>
+              <p>Streamlined session and student management</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Side - Login Form -->
+    <div class="form-section">
+      <div class="login-card">
+        <div class="login-header">
+          <h2>Sign In</h2>
+          <p>Choose your role and enter your credentials</p>
+        </div>
+
+        <!-- User Type Selection -->
+        <div class="user-type-selector">
+          <button 
+            type="button"
+            class="user-type-btn"
+            [class.active]="selectedUserType === 'Student'"
+            (click)="selectUserType('Student')">
+            <span class="user-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/>
+              </svg>
+            </span>
+            <span class="user-label">Student</span>
+          </button>
+          <button 
+            type="button"
+            class="user-type-btn"
+            [class.active]="selectedUserType === 'Instructor'"
+            (click)="selectUserType('Instructor')">
+            <span class="user-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+              </svg>
+            </span>
+            <span class="user-label">Instructor</span>
+          </button>
+          <button 
+            type="button"
+            class="user-type-btn"
+            [class.active]="selectedUserType === 'Admin'"
+            (click)="selectUserType('Admin')">
+            <span class="user-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+              </svg>
+            </span>
+            <span class="user-label">Admin</span>
+          </button>
+        </div>
+
+        <div class="alert alert-error" *ngIf="error">
+          <span class="alert-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+            </svg>
+          </span>
+          {{ error }}
+        </div>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="userName">
+              <span class="label-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                </svg>
+              </span>
+              Username
+            </label>
+            <input 
+              type="text" 
+              id="userName"
+              formControlName="userName"
+              class="form-control"
+              [class.is-invalid]="isFieldInvalid('userName')"
+              placeholder="Enter your username"
+              autocomplete="username">
+            <div class="error-message" *ngIf="isFieldInvalid('userName')">
+              Username is required
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">
+              <span class="label-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                </svg>
+              </span>
+              Password
+            </label>
+            <input 
+              type="password" 
+              id="password"
+              formControlName="password"
+              class="form-control"
+              [class.is-invalid]="isFieldInvalid('password')"
+              placeholder="Enter your password"
+              autocomplete="current-password">
+            <div class="error-message" *ngIf="isFieldInvalid('password')">
+              Password is required
+            </div>
+          </div>
+
+          <button 
+            type="submit" 
+            class="btn-login"
+            [disabled]="loading || loginForm.invalid">
+            <span *ngIf="!loading">Sign In as {{ selectedUserType }}</span>
+            <span *ngIf="loading" class="loading-text">
+              <span class="spinner"></span>
+              Signing in...
+            </span>
+          </button>
+        </form>
+
+        <div class="login-footer">
+          <p>New student? <a routerLink="/student/register">Apply a request for registration</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

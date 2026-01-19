@@ -1,0 +1,11 @@
+{
+  "/api/*": {
+    "target": "https://nti.runasp.net",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api": "/api"
+    }
+  }
+}

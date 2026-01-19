@@ -1,0 +1,188 @@
+<div class="history-wrapper">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-brand" (click)="goToLogo()" style="cursor: pointer;">
+        <img src="assets/images/logo.png" alt="NTI Logo" class="logo">
+      </div>
+
+      <div class="navbar-actions">
+        <button class="btn-logout" (click)="logout()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          Logout
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="container">
+      <h1>Attendance History</h1>
+      <p class="subtitle">Track your session attendance records</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Loading attendance history...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="error-card">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <p>{{ error }}</p>
+      <button class="btn btn-primary" (click)="loadAttendanceHistory()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        Retry
+      </button>
+    </div>
+
+    <!-- Content -->
+    <div *ngIf="!loading && !error">
+      <!-- Statistics Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon complete">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div class="stat-content">
+            <p class="stat-label">Complete</p>
+            <p class="stat-value">{{ completedCount }}</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon partial">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div class="stat-content">
+            <p class="stat-label">Partial</p>
+            <p class="stat-value">{{ partialCount }}</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon absent">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div class="stat-content">
+            <p class="stat-label">Absent</p>
+            <p class="stat-value">{{ absentCount }}</p>
+          </div>
+        </div>
+
+        <div class="stat-card highlight">
+          <div class="stat-icon rate">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+          </div>
+          <div class="stat-content">
+            <p class="stat-label">Attendance Rate</p>
+            <p class="stat-value">{{ attendanceRate }}%</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters & Search -->
+      <div class="filters-bar">
+        <div class="filter-buttons">
+          <button 
+            class="filter-btn"
+            [class.active]="selectedFilter === 'all'"
+            (click)="onFilterChange('all')">
+            All Records ({{ attendanceRecords.length }})
+          </button>
+          <button 
+            class="filter-btn"
+            [class.active]="selectedFilter === 'completed'"
+            (click)="onFilterChange('completed')">
+            Completed ({{ completedCount }})
+          </button>
+          <button 
+            class="filter-btn"
+            [class.active]="selectedFilter === 'incomplete'"
+            (click)="onFilterChange('incomplete')">
+            Incomplete ({{ partialCount + absentCount }})
+          </button>
+        </div>
+
+        <div class="search-box">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input 
+            type="text" 
+            placeholder="Search by session name..." 
+            (input)="onSearchChange($event)"
+            [value]="searchQuery">
+        </div>
+      </div>
+
+      <!-- Attendance Table -->
+      <div class="table-container">
+        <div *ngIf="filteredRecords.length > 0; else noRecords">
+          <div class="attendance-card" *ngFor="let record of filteredRecords">
+            <div class="card-header">
+              <div class="session-info">
+                <h3>{{ record.sessionName }}</h3>
+                <div class="meta">
+                  <span class="date">{{ formatDate(record.sessionDate) }}</span>
+                </div>
+              </div>
+              <div class="status-badge" [ngClass]="getStatusColor(record)">
+                {{ getStatusText(record) }}
+              </div>
+            </div>
+
+            <div class="card-body">
+              <div class="time-info">
+                <div class="time-badge check-in" [class.empty]="!record.checkIn?.at">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                  </svg>
+                  <span>Check-In: {{ formatTime(record.checkIn?.at || null) }}</span>
+                </div>
+
+                <div class="time-badge check-out" [class.empty]="!record.checkOut?.at">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                  <span>Check-Out: {{ formatTime(record.checkOut?.at || null) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #noRecords>
+          <div class="empty-state">
+            <div class="empty-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <h3>No Records Found</h3>
+            <p>{{ searchQuery ? 'Try adjusting your search or filters' : 'You haven\'t attended any sessions yet' }}</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,419 @@
+<div class="dashboard-wrapper">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-brand" (click)="goToLogo()" style="cursor: pointer;">
+        <img src="assets/images/logo.png" alt="NTI Logo" class="logo">
+      </div>
+
+      <div class="navbar-actions">
+        <div class="profile-dropdown">
+          <button class="btn-icon" (click)="toggleProfileMenu($event)">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          </button>
+
+          <div class="dropdown-menu" *ngIf="profileMenuOpen">
+            <div class="dropdown-header">
+              <div class="user-avatar">
+                {{ profile?.fullNameEnglish?.charAt(0) || 'S' }}
+              </div>
+              <div class="user-info">
+                <p class="user-name">{{ profile?.fullNameEnglish }}</p>
+                <p class="user-track">{{ profile?.track?.name }}</p>
+              </div>
+            </div>
+
+            <div class="dropdown-divider"></div>
+
+            <button class="dropdown-item" (click)="activeTab = 'profile'; profileMenuOpen = false; mobileMenuOpen = false">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              My Profile
+            </button>
+
+            <button class="dropdown-item" (click)="openChangePassword(); profileMenuOpen = false; mobileMenuOpen = false">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+              </svg>
+              Change Password
+            </button>
+
+            <div class="dropdown-divider"></div>
+
+            <button class="dropdown-item danger" (click)="logout(); profileMenuOpen = false; mobileMenuOpen = false">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              Logout
+            </button>
+          </div>
+        </div>
+        
+        <!-- Hamburger Menu Button -->
+        <button class="hamburger" [class.active]="mobileMenuOpen" (click)="toggleMobileMenu()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Mobile Sidebar -->
+  <div class="sidebar-overlay" [class.active]="mobileMenuOpen" (click)="mobileMenuOpen = false"></div>
+  <div class="navbar-sidebar" [class.mobile-open]="mobileMenuOpen">
+    <div class="sidebar-header">
+      <span class="greeting">Hi, {{ firstName }}</span>
+      <button class="close-sidebar" (click)="mobileMenuOpen = false">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    
+    <div class="sidebar-menu">
+      <button class="nav-link" [class.active]="activeTab === 'sessions'" (click)="activeTab = 'sessions'; mobileMenuOpen = false">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+        </svg>
+        Active Sessions
+      </button>
+
+      <button class="nav-link" [class.active]="activeTab === 'history'" (click)="navigateToHistory(); mobileMenuOpen = false">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        History
+      </button>
+      
+      <button class="nav-link" [class.active]="activeTab === 'profile'" (click)="activeTab = 'profile'; mobileMenuOpen = false">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+        Profile
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="dashboard-container">
+    <!-- Active Sessions Tab -->
+    <div *ngIf="activeTab === 'sessions'">
+      <div class="dashboard-header">
+        <div class="header-content">
+          <h1>📚 Active Sessions</h1>
+          <p class="subtitle">Scan QR code to mark your attendance</p>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="loading" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading active sessions...</p>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="error && !loading" class="error-card">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p>{{ error }}</p>
+        <button class="btn btn-primary" (click)="loadActiveSessions()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          Retry
+        </button>
+      </div>
+
+      <!-- Sessions Grid -->
+      <div class="sessions-grid" *ngIf="!loading && !error">
+        @for (session of activeSessions; track session.id) {
+          <div class="session-card">
+            <div class="card-glow"></div>
+            
+            <div class="session-header">
+              <div class="header-left">
+                <h3>{{ session.sessionName }}</h3>
+                <span class="track-badge">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                  </svg>
+                  {{ session.track.name }}
+                </span>
+              </div>
+              
+              <span class="session-status" 
+                    [ngClass]="session.isCheckInOpen ? 'status-check-in' : (session.isCheckOutOpen ? 'status-check-out' : 'status-closed')">
+                <span class="status-dot"></span>
+                {{ session.isCheckInOpen ? 'Check-In Open' : (session.isCheckOutOpen ? 'Check-Out Open' : 'Closed') }}
+              </span>
+            </div>
+
+            <div class="session-info">
+              <div class="info-item">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>{{ formatDate(session.sessionDate) }}</span>
+              </div>
+
+              <div class="info-item">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{{ formatTime(session.createdAt) }}</span>
+              </div>
+
+              <div class="info-item">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <span>{{ session.instructor.fullName }}</span>
+              </div>
+            </div>
+
+            <button 
+              class="btn btn-primary" 
+              (click)="openQRScanner(session)"
+              [disabled]="!session.isCheckInOpen && !session.isCheckOutOpen">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+              </svg>
+              Scan QR Code
+            </button>
+          </div>
+        }
+
+        <!-- Empty State -->
+        @if (activeSessions.length === 0) {
+          <div class="empty-state">
+            <div class="empty-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+            </div>
+            <h3>No Active Sessions</h3>
+            <p>There are no active sessions at the moment. Check back later!</p>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Profile Tab -->
+    <div *ngIf="activeTab === 'profile'">
+      <div class="dashboard-header">
+        <div class="header-content">
+          <h1>My Profile</h1>
+          <p class="subtitle">Your personal information and account details</p>
+        </div>
+      </div>
+
+      <div *ngIf="loadingProfile" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading profile...</p>
+      </div>
+
+      <div *ngIf="profile && !loadingProfile" class="profile-container">
+        <!-- Main Profile Card with Avatar -->
+        <div class="profile-hero-card">
+          <div class="profile-background">
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+            <div class="gradient-orb orb-3"></div>
+          </div>
+          
+          <div class="profile-hero-content">
+            <div class="avatar-section">
+              <div class="avatar-container">
+                <div class="avatar-glow"></div>
+                <div class="avatar-ring ring-1"></div>
+                <div class="avatar-ring ring-2"></div>
+                <div class="avatar-circle">
+                  <span class="avatar-letter">{{ profile.fullNameEnglish?.charAt(0) || 'S' }}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="profile-info">
+              <h2 class="profile-name">{{ profile.fullNameEnglish }}</h2>
+              <p class="profile-name-ar">{{ profile.fullNameArabic }}</p>
+              <div class="profile-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                </svg>
+                <span>Verified Student</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Info Grid Cards -->
+        <div class="profile-details-grid">
+          <div class="detail-card card-primary">
+            <div class="card-icon-wrapper">
+              <div class="card-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
+                </svg>
+              </div>
+            </div>
+            <div class="card-content">
+              <span class="card-label">National ID</span>
+              <span class="card-value">{{ profile.nationalId }}</span>
+            </div>
+            <div class="card-shine"></div>
+          </div>
+
+          <div class="detail-card card-secondary">
+            <div class="card-icon-wrapper">
+              <div class="card-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+            </div>
+            <div class="card-content">
+              <span class="card-label">Email Address</span>
+              <span class="card-value">{{ profile.email }}</span>
+            </div>
+            <div class="card-shine"></div>
+          </div>
+
+          <div class="detail-card card-accent">
+            <div class="card-icon-wrapper">
+              <div class="card-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                </svg>
+              </div>
+            </div>
+            <div class="card-content">
+              <span class="card-label">Track Program</span>
+              <span class="card-value">{{ profile.track.name }}</span>
+            </div>
+            <div class="card-shine"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QR Scanner Modal -->
+<div class="modal-overlay" *ngIf="showQRScanner" (click)="closeQRScanner()">
+  <div class="modal-container qr-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Scan QR Code</h2>
+      <button class="close-btn" (click)="closeQRScanner()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="session-info-box" *ngIf="scanningSession">
+        <h4>{{ scanningSession.sessionName }}</h4>
+        <p>{{ scanningSession.track.name }} - {{ scanningSession.instructor.fullName }}</p>
+      </div>
+
+      <div *ngIf="!scanSuccess && !scanError">
+        <div id="qr-reader"></div>
+      </div>
+
+      <div *ngIf="scanSuccess" class="success-message">
+        <div class="success-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h3>Attendance Marked!</h3>
+        <p>Your attendance has been recorded successfully.</p>
+      </div>
+
+      <div *ngIf="scanError" class="error-message">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p>{{ scanError }}</p>
+        <button class="btn btn-primary" (click)="retryQRScan()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          Try Again
+        </button>
+      </div>
+    </div>
+
+    <div class="modal-footer" *ngIf="scanSuccess || scanError">
+      <button class="btn btn-secondary" (click)="closeQRScanner()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Change Password Modal -->
+<div class="modal-overlay" *ngIf="showPasswordModal" (click)="closePasswordModal()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Change Password</h2>
+      <button class="close-btn" (click)="closePasswordModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div *ngIf="passwordError" class="alert alert-error">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        {{ passwordError }}
+      </div>
+
+      <div *ngIf="passwordSuccess" class="alert alert-success">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Password changed successfully!
+      </div>
+
+      <form (ngSubmit)="changePassword()">
+        <div class="form-group">
+          <label for="newPassword">New Password</label>
+          <input 
+            type="password" 
+            id="newPassword" 
+            class="form-control" 
+            [(ngModel)]="newPassword"
+            name="newPassword"
+            required
+            minlength="6">
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input 
+            type="password" 
+            id="confirmPassword" 
+            class="form-control" 
+            [(ngModel)]="confirmPassword"
+            name="confirmPassword"
+            required>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closePasswordModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="changingPassword || !newPassword || !confirmPassword">
+            <span *ngIf="!changingPassword">Change Password</span>
+            <span *ngIf="changingPassword">Changing...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

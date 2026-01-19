@@ -1,0 +1,302 @@
+<div class="page-wrapper">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-brand">
+        <img src="assets/images/logo.png" alt="NTI Logo" class="logo">
+      </div>
+      <button class="btn-back" routerLink="/instructor/dashboard">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+        Back to Dashboard
+      </button>
+    </div>
+  </nav>
+
+  <div class="session-management-container">
+    <div class="page-header">
+      <h1>Session Management</h1>
+      <p class="subtitle">Manage attendance, QR codes, and session details</p>
+    </div>
+
+    <div class="alert alert-success" *ngIf="successMessage">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+      </svg>
+      {{ successMessage }}
+    </div>
+
+    <div class="alert alert-error" *ngIf="error">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+      </svg>
+      {{ error }}
+    </div>
+
+    <div class="session-info-card" *ngIf="session">
+      <div class="card-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+        </svg>
+      </div>
+      <h2>{{ session.trackName }}</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+          </svg>
+          <div>
+            <span class="label">Date:</span>
+            <span class="value">{{ session.sessionDate | date:'fullDate' }}</span>
+          </div>
+        </div>
+        <div class="info-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+          </svg>
+          <div>
+            <span class="label">Time:</span>
+            <span class="value">{{ session.sessionDate | date:'shortTime' }}</span>
+          </div>
+        </div>
+        <div class="info-item" *ngIf="session.description">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+          </svg>
+          <div>
+            <span class="label">Description:</span>
+            <span class="value">{{ session.description }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-grid">
+      <!-- QR Code Section -->
+      <div class="qr-section card">
+        <div class="section-header">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 11h8V3H3v8zm2-6h4v4H5V5zM3 21h8v-8H3v8zm2-6h4v4H5v-4zM13 3v8h8V3h-8zm6 6h-4V5h4v4zM13 13h2v2h-2zM15 15h2v2h-2zM13 17h2v2h-2zM15 19h2v2h-2zM17 17h2v2h-2zM17 13h2v2h-2zM19 15h2v2h-2z"/>
+          </svg>
+          <h3>QR Code Attendance</h3>
+        </div>
+
+        <div class="control-buttons">
+          <div class="button-group">
+            <button 
+              class="btn btn-success" 
+              (click)="openCheckIn()" 
+              [disabled]="isCheckInOpen || loading">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              </svg>
+              Open Check-In
+            </button>
+            <button 
+              class="btn btn-danger" 
+              (click)="closeCheckIn()" 
+              [disabled]="!isCheckInOpen || loading">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+              </svg>
+              Close Check-In
+            </button>
+          </div>
+
+          <div class="button-group">
+            <button 
+              class="btn btn-success" 
+              (click)="openCheckOut()" 
+              [disabled]="isCheckOutOpen || loading">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              </svg>
+              Open Check-Out
+            </button>
+            <button 
+              class="btn btn-danger" 
+              (click)="closeCheckOut()" 
+              [disabled]="!isCheckOutOpen || loading">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+              </svg>
+              Close Check-Out
+            </button>
+          </div>
+        </div>
+
+        <div class="qr-display" *ngIf="qrToken">
+          <div class="qr-status">
+            <span class="status-badge" [class.active]="isCheckInOpen || isCheckOutOpen">
+              {{ isCheckInOpen ? 'Check-In Active' : isCheckOutOpen ? 'Check-Out Active' : 'Inactive' }}
+            </span>
+            <span class="timer">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+              </svg>
+              {{ timeRemaining }}s
+            </span>
+          </div>
+          
+          <div class="qr-code-wrapper">
+            <qrcode 
+              [qrdata]="qrToken" 
+              [width]="qrSize" 
+              [errorCorrectionLevel]="'M'"
+              [cssClass]="'qr-code'">
+            </qrcode>
+          </div>
+          
+          <p class="qr-instruction">Students scan this QR code to {{ isCheckInOpen ? 'check in' : 'check out' }}</p>
+        </div>
+
+        <div class="qr-placeholder" *ngIf="!qrToken">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/>
+          </svg>
+          <p>Open Check-In or Check-Out to display QR code</p>
+        </div>
+      </div>
+
+      <!-- Manual Attendance Section -->
+      <div class="manual-section card">
+        <div class="section-header">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+          <h3>Manual Attendance</h3>
+        </div>
+
+        <div class="manual-form">
+          <div class="form-group">
+            <label>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+              Attendance Type
+            </label>
+            <div class="select-wrapper">
+              <select [(ngModel)]="attendanceType" class="form-control">
+                <option value="CheckIn">Check In</option>
+                <option value="CheckOut">Check Out</option>
+              </select>
+              <svg class="select-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M7 10l5 5 5-5z"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+              </svg>
+              Last 4 Digits of National ID
+            </label>
+            <input 
+              type="text" 
+              [(ngModel)]="lastFourDigits" 
+              class="form-control"
+              placeholder="e.g., 0318"
+              maxlength="4"
+              pattern="[0-9]{4}">
+          </div>
+
+          <button 
+            class="btn btn-primary full-width" 
+            (click)="markManualAttendance()"
+            [disabled]="loading || !lastFourDigits || lastFourDigits.length !== 4">
+            <svg *ngIf="!loading" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+            </svg>
+            <span class="spinner" *ngIf="loading"></span>
+            {{ loading ? 'Processing...' : 'Mark Attendance' }}
+          </button>
+        </div>
+
+        <!-- Attendance Stats -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+            </svg>
+            <div class="stat-value">{{ getAttendanceStats().total }}</div>
+            <div class="stat-label">Total Students</div>
+          </div>
+          <div class="stat-card present">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+            </svg>
+            <div class="stat-value">{{ getAttendanceStats().present }}</div>
+            <div class="stat-label">Present</div>
+          </div>
+          <div class="stat-card checked-in">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+            <div class="stat-value">{{ getAttendanceStats().checkedIn }}</div>
+            <div class="stat-label">Checked In</div>
+          </div>
+          <div class="stat-card absent">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 9.99 10S22 17.53 22 12 17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+            </svg>
+            <div class="stat-value">{{ getAttendanceStats().absent }}</div>
+            <div class="stat-label">Absent</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Attendance List -->
+    <div class="attendance-section card">
+      <div class="section-header">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+        </svg>
+        <h3>Attendance Records</h3>
+        <button class="btn btn-secondary" (click)="loadAttendance()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+          </svg>
+          Refresh
+        </button>
+      </div>
+
+      <div class="attendance-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Student Name</th>
+              <th>National ID</th>
+              <th>Check-In Time</th>
+              <th>Check-Out Time</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let record of attendance">
+              <td>{{ record.student.name }}</td>
+              <td>{{ record.student.nationalId }}</td>
+              <td>{{ record.checkIn?.at ? (record.checkIn?.at | date:'short') : '-' }}</td>
+              <td>{{ record.checkOut?.at ? (record.checkOut?.at | date:'short') : '-' }}</td>
+              <td>
+                <span class="status-badge" [ngClass]="getStatusClass(record)">
+                  {{ getStatusText(record) }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="empty-state" *ngIf="attendance.length === 0">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"/>
+          </svg>
+          <p>No attendance records yet</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

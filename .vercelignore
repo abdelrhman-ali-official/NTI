@@ -1,0 +1,12 @@
+node_modules
+.angular
+.vscode
+.git
+*.log
+.env
+.env.local
+dist
+coverage
+.nyc_output
+e2e
+src/**/*.spec.ts
