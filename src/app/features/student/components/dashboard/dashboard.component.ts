@@ -5,6 +5,7 @@ import { StudentService } from '../../services/student.service';
 import { AuthService } from '@core/services/auth.service';
 import { ActiveSession, StudentProfile } from '@core/models/student.model';
 import { FormsModule } from '@angular/forms';
+import { formatEgyptDate, formatEgyptTime } from '../../../../shared/utils/date-converter.util';
 
 // QR Scanner interface
 declare var Html5QrcodeScanner: any;
@@ -278,15 +279,11 @@ export class StudentDashboardComponent implements OnInit {
   }
 
   formatDate(date: string): string {
-    return new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
+    return formatEgyptDate(date);
   }
 
   formatTime(date: string): string {
-    return new Date(date).toLocaleTimeString('en-US', {
+    return formatEgyptTime(date, {
       hour: '2-digit',
       minute: '2-digit'
     });

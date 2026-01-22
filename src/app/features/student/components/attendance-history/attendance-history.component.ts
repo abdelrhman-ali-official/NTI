@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { StudentService } from '../../services/student.service';
 import { StudentAttendanceRecord } from '../../../../core/models/student.model';
 import { AuthService } from '../../../../core/services/auth.service';
+import { formatEgyptDate, formatEgyptTime } from '../../../../shared/utils/date-converter.util';
 
 @Component({
   selector: 'app-attendance-history',
@@ -111,22 +112,12 @@ export class AttendanceHistoryComponent implements OnInit {
   }
 
   formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
-    });
+    return formatEgyptDate(dateString);
   }
 
   formatTime(dateTimeString: string | null): string {
     if (!dateTimeString) return '-';
-    const date = new Date(dateTimeString);
-    return date.toLocaleTimeString('en-US', { 
-      hour: '2-digit', 
-      minute: '2-digit',
-      hour12: true 
-    });
+    return formatEgyptTime(dateTimeString);
   }
 
   getStatusColor(record: StudentAttendanceRecord): string {

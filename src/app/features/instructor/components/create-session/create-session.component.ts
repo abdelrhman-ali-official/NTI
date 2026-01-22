@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { InstructorService } from '../../services/instructor.service';
 import { Track } from '@core/models/instructor.model';
+import { convertEgyptTimeToUTC } from '../../../../shared/utils/date-converter.util';
 
 @Component({
   selector: 'app-create-session',
@@ -70,7 +71,8 @@ export class CreateSessionComponent implements OnInit {
     const formValue = this.sessionForm.value;
     const request = {
       ...formValue,
-      sessionDate: new Date(formValue.sessionDate).toISOString()
+      // Convert from Egypt time (UTC+2) to UTC before sending to backend
+      sessionDate: convertEgyptTimeToUTC(formValue.sessionDate)
     };
 
     this.instructorService.createSession(request).subscribe({

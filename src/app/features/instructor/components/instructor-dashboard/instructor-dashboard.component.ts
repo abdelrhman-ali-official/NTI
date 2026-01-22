@@ -5,11 +5,13 @@ import { FormsModule } from '@angular/forms';
 import { InstructorService } from '../../services/instructor.service';
 import { AuthService } from '@core/services/auth.service';
 import { Session, Student, Track, CreateHistoricalSessionRequest, SessionAttendance } from '@core/models/instructor.model';
+import { formatEgyptDateTime, convertToEgyptTime, convertEgyptTimeToUTC } from '../../../../shared/utils/date-converter.util';
+import { EgyptDatePipe } from '../../../../shared/pipes/egypt-date.pipe';
 
 @Component({
   selector: 'app-instructor-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, EgyptDatePipe],
   templateUrl: './instructor-dashboard.component.html',
   styleUrls: ['./instructor-dashboard.component.css']
 })
@@ -244,7 +246,14 @@ export class InstructorDashboardComponent implements OnInit {
 
   createHistoricalSession(): void {
     this.creatingHistorical = true;
-    this.instructorService.createHistoricalSession(this.historicalSession).subscribe({
+    
+    // Convert the session date from Egypt time to UTC before sending to backend
+    const requestData = {
+      ...this.historicalSession,
+      sessionDate: convertEgyptTimeToUTC(this.historicalSession.sessionDate)
+    };
+    
+    this.instructorService.createHistoricalSession(requestData).subscribe({
       next: () => {
         this.creatingHistorical = false;
         this.historicalSession = {
@@ -369,8 +378,7 @@ export class InstructorDashboardComponent implements OnInit {
 
   formatDateTime(dateTime: string | null): string {
     if (!dateTime) return '-';
-    const date = new Date(dateTime);
-    return date.toLocaleString('en-US', {
+    return formatEgyptDateTime(dateTime, {
       year: 'numeric',
       month: 'short',
       day: 'numeric',

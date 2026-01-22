@@ -7,11 +7,12 @@ import { InstructorService } from '../../services/instructor.service';
 import { QRCodeService } from '../../services/qr-code.service';
 import { Session, AttendanceRecord, ManualAttendanceRequest } from '@core/models/instructor.model';
 import { interval, Subscription } from 'rxjs';
+import { EgyptDatePipe } from '../../../../shared/pipes/egypt-date.pipe';
 
 @Component({
   selector: 'app-session-management',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, QRCodeModule],
+  imports: [CommonModule, RouterModule, FormsModule, QRCodeModule, EgyptDatePipe],
   providers: [QRCodeService],
   templateUrl: './session-management.component.html',
   styleUrls: ['./session-management.component.css']

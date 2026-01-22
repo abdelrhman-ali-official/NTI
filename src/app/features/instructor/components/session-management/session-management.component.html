@@ -48,7 +48,7 @@
           </svg>
           <div>
             <span class="label">Date:</span>
-            <span class="value">{{ session.sessionDate | date:'fullDate' }}</span>
+            <span class="value">{{ session.sessionDate | egyptDate:'fullDate' }}</span>
           </div>
         </div>
         <div class="info-item">
@@ -57,7 +57,7 @@
           </svg>
           <div>
             <span class="label">Time:</span>
-            <span class="value">{{ session.sessionDate | date:'shortTime' }}</span>
+            <span class="value">{{ session.sessionDate | egyptDate:'shortTime' }}</span>
           </div>
         </div>
         <div class="info-item" *ngIf="session.description">
@@ -279,7 +279,7 @@
             <tr *ngFor="let record of attendance">
               <td>{{ record.student.name }}</td>
               <td>{{ record.student.nationalId }}</td>
-              <td>{{ record.checkIn?.at ? (record.checkIn?.at | date:'short') : '-' }}</td>
+              <td>{{ record.checkIn?.at ? (record.checkIn?.at | egyptDate:'medium') : '-' }}</td>
               <td>{{ record.checkOut?.at ? (record.checkOut?.at | date:'short') : '-' }}</td>
               <td>
                 <span class="status-badge" [ngClass]="getStatusClass(record)">
